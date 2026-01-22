@@ -1,14 +1,15 @@
 
 import React from 'react';
-import { Home, BarChart2, Lightbulb, Coffee } from 'lucide-react';
+import { Home, BarChart2, Lightbulb, Coffee, Cloud, CheckCircle2, RefreshCw } from 'lucide-react';
 
 interface LayoutProps {
   children: React.ReactNode;
   activeTab: string;
   setActiveTab: (tab: string) => void;
+  isSyncing?: boolean;
 }
 
-const Layout: React.FC<LayoutProps> = ({ children, activeTab, setActiveTab }) => {
+const Layout: React.FC<LayoutProps> = ({ children, activeTab, setActiveTab, isSyncing = false }) => {
   const navItems = [
     { id: 'home', icon: Home, label: 'Home' },
     { id: 'stats', icon: BarChart2, label: 'Stats' },
@@ -17,12 +18,33 @@ const Layout: React.FC<LayoutProps> = ({ children, activeTab, setActiveTab }) =>
   ];
 
   return (
-    <div className="min-h-screen pb-24 max-w-md mx-auto bg-[#FDFBFB] shadow-2xl relative overflow-hidden">
+    <div className="min-h-screen pb-24 max-w-md mx-auto bg-[#FDFBFB] shadow-2xl relative overflow-hidden flex flex-col">
       {/* Soft Background Accents */}
       <div className="absolute top-[-50px] left-[-50px] w-48 h-48 bg-pink-100 rounded-full blur-3xl opacity-50 z-0"></div>
       <div className="absolute bottom-[-20px] right-[-20px] w-64 h-64 bg-green-100 rounded-full blur-3xl opacity-50 z-0"></div>
       
-      <main className="relative z-10 p-6 pt-10">
+      {/* Top Status Bar */}
+      <div className="relative z-20 px-6 pt-6 flex justify-between items-center">
+        <div className="flex items-center gap-2">
+          <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+          <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Live Orbit</span>
+        </div>
+        <div className="flex items-center gap-1.5 bg-white/50 backdrop-blur-sm px-3 py-1 rounded-full border border-gray-100 shadow-sm">
+          {isSyncing ? (
+            <>
+              <RefreshCw size={10} className="text-pink-400 animate-spin" />
+              <span className="text-[9px] font-bold text-pink-500 uppercase">Syncing...</span>
+            </>
+          ) : (
+            <>
+              <Cloud size={10} className="text-gray-300" />
+              <span className="text-[9px] font-bold text-gray-400 uppercase">Vault Secure</span>
+            </>
+          )}
+        </div>
+      </div>
+
+      <main className="relative z-10 p-6 flex-1">
         {children}
       </main>
 
